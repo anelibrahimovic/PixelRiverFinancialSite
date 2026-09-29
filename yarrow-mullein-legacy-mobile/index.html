@@ -41,6 +41,13 @@
     .wide{width:100%;margin:6px 0}
     .links{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:12px 0}
     .links button{font-size:12px;min-height:62px;text-align:left;padding:9px}
+    .steps{list-style:decimal;padding-left:19px;margin:7px 0 12px;color:#4b5547;font-size:12px;line-height:1.7}
+    .wait-box{background:#f0efe6;border:1px dashed #8f9283;padding:11px 10px;font-size:12px;line-height:1.5;margin:10px 0}
+    .ticket-steps{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:0;margin:4px 0 12px;list-style:none}
+    .ticket-steps li{padding:9px 5px;border:1px solid #bbc0b0;background:#e4e7df;font-size:11px;text-align:center;color:#4c594a}
+    .ticket-steps li.active{background:#e0c553;border-color:#aa9238;font-weight:bold}
+    .ticket-print-title{font-size:14px;font-weight:bold;margin:0 0 8px}
+    .ticket-print-only{display:none}
     .important{background:#faf3ce;border:1px solid #bcb279;padding:10px;font-size:12px;line-height:1.45;margin:14px 0}
     label{display:block;font-size:12px;font-weight:bold;margin:13px 0 5px;color:#344537}
     input,select,textarea{display:block;width:100%;padding:10px;min-height:43px;border:1px solid #969e92;border-radius:0;background:white;color:#1f3329;font-size:14px}
@@ -58,8 +65,8 @@
     .login-legend{color:#53604b;font-size:12px;letter-spacing:1px;font-weight:bold}
     .login-form{background:#fff;border:1px solid #b3b4a7;margin:4px 0 11px;padding:12px}
     .login-form h1{margin-top:1px;font-size:19px}
-    .nav{display:grid;grid-template-columns:repeat(3,1fr);border-top:2px solid #748362;background:#d5d9cd;position:sticky;bottom:0;z-index:2}
-    .nav button{border:0;border-right:1px solid #a8b09f;background:#d5d9cd;min-height:59px;font-size:11px;font-weight:bold;color:#42533d}
+    .nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:2px solid #748362;background:#d5d9cd;position:sticky;bottom:0;z-index:2}
+    .nav button{border:0;border-right:1px solid #a8b09f;background:#d5d9cd;min-height:59px;font-size:10px;font-weight:bold;color:#42533d;min-width:0;padding:3px 1px}
     .nav button:last-child{border-right:0}
     .nav button.current{background:#f3f1df;border-top:4px solid #b89b32;color:#344939;margin-top:-4px}
     .nav-icon{display:block;font-size:20px;font-weight:normal;margin-bottom:1px}
@@ -67,6 +74,16 @@
     [hidden]{display:none!important}
     @media(min-width:740px){body{display:grid;place-items:center;padding:25px;background:#dcded6}.phone{width:385px;min-height:745px;height:min(840px,calc(100dvh - 50px));box-shadow:0 8px 24px #6a756066;border:6px solid #686a65;border-radius:8px;overflow:hidden}.phone main{overflow-y:auto}.nav{position:static}.legal{font-size:10px}}
     @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+    @media print{
+      body{background:white!important;font:12pt Arial,sans-serif!important}
+      body *{visibility:hidden!important}
+      #ticketResult,#ticketResult *{visibility:visible!important}
+      #ticketResult{display:block!important;position:absolute!important;left:0!important;top:0!important;width:100%!important;border:0!important;color:#111!important}
+      #ticketResult .success{background:white!important;border:2px solid #333!important;padding:20px!important;box-shadow:none!important}
+      #ticketPrintButton,#ticketResult button{display:none!important}
+      #ticketResult .ticket-print-only{display:block!important}
+      @page{size:A4;margin:20mm}
+    }
   </style>
 </head>
 <body>
@@ -101,7 +118,7 @@
           <div class="account"><div class="acct-name">Everyday Chequing</div><div class="acct-id">Account ending 0428</div><div class="balance">$8,462.55</div><span class="muted">Available balance</span></div>
           <div class="account"><div class="acct-name">Growth Savings</div><div class="acct-id">Account ending 6819</div><div class="balance">$21,340.20</div><span class="muted">Available balance</span></div>
         </div>
-        <div class="box"><div class="box-heading">Member Services</div><div class="box-content"><div class="links"><button class="secondary" data-page="transfers" type="button">Transfer funds &raquo;</button><button class="secondary" data-page="contact" type="button">Contact bank &raquo;</button></div><p class="muted">Please contact Member Services if you require assistance with a transaction.</p></div></div>
+        <div class="box"><div class="box-heading">Member Services</div><div class="box-content"><div class="links"><button class="secondary" data-page="transfers" type="button">Transfer funds &raquo;</button><button class="secondary" data-page="contact" type="button">Contact bank &raquo;</button><button class="secondary" data-page="tickets" type="button">Request help / file a ticket &raquo;</button></div><p class="muted">Please contact Member Services if you require assistance with a transaction.</p></div></div>
         <div class="important"><strong>Please note:</strong> Balances shown here are sample account figures. Transfers and payment requests are handled manually. Changes may not appear immediately.</div>
       </section>
       <section id="transfersPage" class="page" hidden>
@@ -120,9 +137,47 @@
           </form>
         </div></div>
       </section>
+      <section id="ticketsPage" class="page" hidden>
+        <div class="kicker">Member services / customer requests</div><h1>Submit a support ticket</h1>
+        <p class="muted">Need help with a payment? Complete the full request form. An employee must review it manually. You cannot check ticket progress in this application.</p>
+        <div class="important"><strong>Manual process:</strong> Fill in the form, review every detail, then keep the reference number. Follow up with Member Services by telephone if you have not heard back.</div>
+        <div id="ticketResult" hidden aria-live="polite"></div>
+        <div id="ticketEntry">
+          <ol class="ticket-steps"><li class="active" id="ticketStep1">1. Enter details</li><li id="ticketStep2">2. Review &amp; submit</li></ol>
+          <div id="ticketFormStage" class="box"><div class="box-heading">Customer request form</div><div class="box-content">
+            <form id="ticketForm" novalidate>
+              <label for="issueType">What is the problem?</label>
+              <select id="issueType" required><option value="">-- Select a problem --</option><option value="Payment has not arrived">Payment has not arrived</option><option value="Payment may have failed">Payment may have failed</option><option value="Incorrect balance">Incorrect account balance</option><option value="Transfer request question">Transfer request question</option><option value="Card or account access">Card or account access</option><option value="Other question">Other question</option></select>
+              <label for="ticketAccount">Which account?</label>
+              <select id="ticketAccount"><option value="Everyday Chequing ••0428">Everyday Chequing (••0428)</option><option value="Growth Savings ••6819">Growth Savings (••6819)</option><option value="Not sure">Not sure</option></select>
+              <label for="ticketRef">Transfer/request reference (if known)</label>
+              <input id="ticketRef" autocomplete="off" maxlength="36" placeholder="Manually type your reference">
+              <p class="subtext">Ticket details cannot be imported from transfers. Enter the reference yourself.</p>
+              <label for="ticketProblem">Describe what happened</label>
+              <textarea id="ticketProblem" maxlength="700" required placeholder="Enter the amount, recipient and what went wrong."></textarea>
+              <label for="ticketReplyMethod">How should staff respond?</label>
+              <select id="ticketReplyMethod"><option value="Telephone">Telephone callback</option><option value="Email">Email</option></select>
+              <label for="ticketContact">Telephone number or email</label>
+              <input id="ticketContact" autocomplete="off" required maxlength="90" placeholder="Example: 204-555-0123">
+              <p class="subtext">This is a classroom simulation. Use fictional contact details only.</p>
+              <p class="error" id="ticketError" role="alert" aria-live="polite"></p>
+              <button class="yellow wide" type="submit">Continue to manual review &raquo;</button>
+            </form>
+          </div></div>
+          <div id="ticketReviewStage" class="box" hidden><div class="box-heading">Verify your request</div><div class="box-content">
+            <p class="important">Check each field carefully. Incorrect requests must be corrected by a bank employee over the phone.</p>
+            <div id="ticketReviewLines"></div>
+            <label style="font-weight:normal"><input type="checkbox" id="ticketAcknowledged" style="display:inline;width:18px;min-height:18px;vertical-align:middle;margin:0 5px 0 0"> I have checked the information and understand I must wait for a manual response.</label>
+            <p class="error" id="ticketReviewError" role="alert" aria-live="polite"></p>
+            <button type="button" class="secondary wide" id="ticketEdit">&laquo; Go back and correct details</button>
+            <button type="button" class="yellow wide" id="ticketSubmit">Submit support ticket</button>
+          </div></div>
+        </div>
+        <div class="box"><div class="box-heading">What happens next?</div><div class="box-content"><ol class="steps"><li>Complete the form and carefully review all details.</li><li>Save the ticket number shown on the confirmation screen.</li><li>Wait for an employee to check the request and respond through your selected contact method.</li><li>If nothing arrives after 3–5 business days, call Member Services and quote your ticket number.</li></ol><p class="muted">There are no automatic updates, live ticket tracking or in-app staff replies.</p></div></div>
+      </section>
       <section id="contactPage" class="page" hidden>
         <div class="kicker">Member services</div><h1>Contact us</h1>
-        <div class="box"><div class="box-heading">Telephone banking</div><div class="box-content"><p>To check whether your transfer has been processed, please call Member Services.</p><div class="gray-bar"><span>Member Services</span><strong>Call your branch</strong></div><p class="muted">For questions about account balances, transfers or payments, speak with an employee during business hours.</p><p>Monday–Friday<br><strong>9:00 AM – 5:00 PM</strong></p><p class="subtext">Illustrative hours for the classroom scenario.</p></div></div>
+        <div class="box"><div class="box-heading">Telephone banking</div><div class="box-content"><p>To check whether your transfer has been processed, please call Member Services.</p><p>If you submitted a support ticket, you must also call the bank and read your reference number to ask for an update.</p><div class="gray-bar"><span>Member Services</span><strong>Call your branch</strong></div><p class="muted">For questions about account balances, transfers or payments, speak with an employee during business hours.</p><p>Monday–Friday<br><strong>9:00 AM – 5:00 PM</strong></p><p class="subtext">Illustrative hours for the classroom scenario.</p></div></div>
         <div class="box"><div class="box-heading">Visit a branch</div><div class="box-content"><p>For complicated payments or account questions, visit your local branch with your identification.</p><button type="button" class="secondary wide" id="branchInfo">Branch information</button></div></div>
       </section>
     </div>
@@ -130,6 +185,7 @@
   <nav class="nav" id="bottomNav" aria-label="Primary navigation" hidden>
     <button type="button" class="current" data-page="home" aria-current="page"><span class="nav-icon">⌂</span>Home</button>
     <button type="button" data-page="transfers"><span class="nav-icon">⇄</span>Transfers</button>
+    <button type="button" data-page="tickets"><span class="nav-icon">▤</span>Tickets</button>
     <button type="button" data-page="contact"><span class="nav-icon">☎</span>Contact</button>
   </nav>
   <footer class="legal">© Yarrow–Mullein Bank · Legacy mobile interface<br>Educational simulation · No connection to a financial institution</footer>
@@ -141,16 +197,23 @@
   const ACCOUNT='4532908711406621';
   const PASSWORD='David123';
   let lastReference=0;
+  let lastTicketNumber=0;
+  let ticketDraft=null;
   const money=n=>new Intl.NumberFormat('en-CA',{style:'currency',currency:'CAD'}).format(n);
   function showPage(page){
-    for(const p of ['home','transfers','contact']) $(p+'Page').hidden=p!==page;
+    for(const p of ['home','transfers','tickets','contact']) $(p+'Page').hidden=p!==page;
     document.querySelectorAll('[data-page]').forEach(b=>{const active=b.dataset.page===page;b.classList.toggle('current',active);if(b.closest('nav')){if(active)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')}});
     $('content').scrollTop=0;
   }
   function session(open){
     $('login').hidden=open;$('app').hidden=!open;$('bottomNav').hidden=!open;$('signout').hidden=!open;
     $('loginError').textContent='';
-    if(open){$('password').value='';showPage('home')}else{$('password').value='';$('requestResult').hidden=true;$('transferForm').reset();toggleTransfer();}
+    if(open){$('password').value='';showPage('home')}
+    else{
+      $('password').value='';$('requestResult').hidden=true;$('transferForm').reset();toggleTransfer();
+      ticketDraft=null;$('ticketForm').reset();$('ticketAcknowledged').checked=false;
+      $('ticketResult').hidden=true;$('ticketResult').innerHTML='';showTicketStage('form');
+    }
   }
   $('loginForm').addEventListener('submit',e=>{
     e.preventDefault();
@@ -162,6 +225,45 @@
   $('signout').addEventListener('click',()=>session(false));
   $('forgot').addEventListener('click',()=>{$('loginError').textContent='Please call Member Services for assistance with your password.'});
   document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>{if(!$('app').hidden)showPage(b.dataset.page)}));
+  function showTicketStage(stage){
+    $('ticketFormStage').hidden=stage!=='form';
+    $('ticketReviewStage').hidden=stage!=='review';
+    $('ticketEntry').hidden=stage==='submitted';
+    $('ticketStep1').classList.toggle('active',stage==='form');
+    $('ticketStep2').classList.toggle('active',stage==='review');
+    $('ticketReviewError').textContent='';
+  }
+  function ticketRow(label,value){return '<div class="row"><span>'+escapeHTML(label)+'</span><strong>'+escapeHTML(value)+'</strong></div>'}
+  function validContact(method,value){return method==='Email' ? /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) : /^[+()\d\s-]{7,25}$/.test(value) && value.replace(/\D/g,'').length>=7}
+  $('ticketReplyMethod').addEventListener('change',()=>{$('ticketContact').placeholder=$('ticketReplyMethod').value==='Email'?'Example: demo@example.test':'Example: 204-555-0123'});
+  $('ticketForm').addEventListener('submit',e=>{
+    e.preventDefault();$('ticketError').textContent='';
+    const category=$('issueType').value;
+    const account=$('ticketAccount').value;
+    const requestRef=$('ticketRef').value.trim();
+    const problem=$('ticketProblem').value.trim();
+    const method=$('ticketReplyMethod').value;
+    const contact=$('ticketContact').value.trim();
+    if(!category){$('ticketError').textContent='Step 1: Select a problem category.';$('issueType').focus();return}
+    if(problem.length<12){$('ticketError').textContent='Step 2: Describe the problem in at least 12 characters.';$('ticketProblem').focus();return}
+    if(!validContact(method,contact)){$('ticketError').textContent='Step 3: Enter a valid sample '+(method==='Email'?'email address.':'telephone number.');$('ticketContact').focus();return}
+    ticketDraft={category,account,requestRef,problem,method,contact};
+    $('ticketReviewLines').innerHTML=ticketRow('Issue type',category)+ticketRow('Account',account)+ticketRow('Manual transfer reference',requestRef||'None entered')+ticketRow('What happened',problem)+ticketRow('Reply by',method)+ticketRow('Reply destination',contact);
+    $('ticketAcknowledged').checked=false;showTicketStage('review');$('content').scrollTop=0;
+  });
+  $('ticketEdit').addEventListener('click',()=>{showTicketStage('form');$('content').scrollTop=0;});
+  $('ticketSubmit').addEventListener('click',()=>{
+    if(!ticketDraft)return;
+    if(!$('ticketAcknowledged').checked){$('ticketReviewError').textContent='Please confirm that you checked every field.';return}
+    lastTicketNumber++;
+    const ref='YM-HELP-'+new Date().getFullYear()+'-'+String(lastTicketNumber).padStart(4,'0');
+    const t=ticketDraft;
+    const lines=ticketRow('Ticket number',ref)+ticketRow('Issue type',t.category)+ticketRow('Account',t.account)+ticketRow('Payment reference (manually entered)',t.requestRef||'Not supplied')+ticketRow('Customer description',t.problem)+ticketRow('Preferred reply',t.method)+ticketRow('Contact (demo only)',t.contact)+ticketRow('Current status','AWAITING MANUAL REVIEW');
+    $('ticketResult').innerHTML='<div class="success" id="ticketConfirmation" role="status"><div class="ticket-print-only ticket-print-title">Yarrow–Mullein Bank: Customer support request (paper copy)</div><h2>Ticket request recorded</h2><p><strong>Write down or print this number.</strong> This is your only confirmation. There is no ticket history in the old mobile application.</p><div class="confirm">'+lines+'</div><div class="wait-box"><strong>Next steps — manual:</strong><ol class="steps"><li>Print or write down the ticket information.</li><li>In this classroom simulation, call Member Services to lodge or confirm the ticket with an employee; this form is not connected to a real bank.</li><li>Wait for a reply by '+escapeHTML(t.method)+'. Allow 3–5 business days (illustrative).</li><li>For an update, call your branch with reference <strong>'+escapeHTML(ref)+'</strong>.</li></ol><strong>No automatic confirmation, alerts or status checks.</strong></div><button id="ticketPrintButton" type="button" class="secondary wide">Print this ticket</button><button id="ticketNewButton" type="button" class="yellow wide">Start a new support ticket</button></div>';
+    $('ticketResult').hidden=false;ticketDraft=null;showTicketStage('submitted');$('content').scrollTop=0;
+    $('ticketPrintButton').addEventListener('click',()=>window.print());
+    $('ticketNewButton').addEventListener('click',()=>{$('ticketResult').hidden=true;$('ticketResult').innerHTML='';$('ticketForm').reset();$('ticketAcknowledged').checked=false;showTicketStage('form');$('content').scrollTop=0});
+  });
   function toggleTransfer(){const external=$('transferKind').value==='external';$('externalFields').hidden=!external;$('internalFields').hidden=external;$('transferError').textContent='';}
   $('transferKind').addEventListener('change',toggleTransfer);
   $('transferForm').addEventListener('submit',e=>{
