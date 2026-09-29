@@ -29,6 +29,10 @@ Incorrect credentials do not sign in. The desktop version intentionally has **no
 - All exports are genuine PDFs: daily report, transaction history, notification history, recurring schedules and individual receipts. The sample reports in `sample-reports/` were exported by the working app and validated with a PDF reader.
 - Larger-text preference, desktop browser notifications (with permission), separate desktop data storage and desktop-oriented centered review dialogs.
 
+## Sign-in troubleshooting
+
+The login is attached directly to its form, so both **clicking Sign in** and pressing **Enter** work. If a document-viewer preview leaves the "Sign-in is loading" notice visible, that preview has disabled JavaScript. **Download `standalone.html` and open the downloaded file in Chrome or Edge** rather than using the embedded document preview. The Access ID is prefilled; enter `David123` as the password. Incorrect passwords produce an explicit inline error.
+
 ## Testing
 
 A Chromium-driven regression suite is included in `tests/`:
