@@ -47,3 +47,6 @@ The suites validate desktop login (including incorrect password), send and move 
 ## What production implementation would require
 
 Secure server-side identity and authorization, a real transaction ledger and payment APIs, hosted job scheduling and notifications, protected personal data storage, bank-controlled audit logs, fraud controls, live incident feeds, and comprehensive security/accessibility assessment. Public sample login details and browser-local ledger data in this educational prototype are **not appropriate for real financial use**.
+## Opening outside restricted previews
+
+If clicking **Sign in** does nothing, the file is probably opened in a document preview that blocks JavaScript. Download and **extract** the project ZIP to a normal folder, then double-click `START_HERE_WINDOWS.bat`, or open extracted `standalone.html` directly in Microsoft Edge or Chrome. Do **not** double-click an HTML file while it is still inside the ZIP archive or use the ChatGPT document preview. If `Sign-in is loading` stays visible, page scripts are blocked; the password cannot be checked there. Test access ID prefilled, password `David123`. This is a simulated local educational application.
