@@ -1,0 +1,1 @@
+{"name":"yarrow-mullein-desktop","version":"1.0.0","private":true,"description":"Educational desktop banking demo","main":"electron-main.cjs","scripts":{"start":"electron ."},"devDependencies":{"electron":"^36.0.0"}}
