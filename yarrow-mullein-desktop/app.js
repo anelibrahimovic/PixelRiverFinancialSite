@@ -41,7 +41,43 @@ let db=load();let current={view:'home',filter:'all',search:'',faqQuery:'',accoun
 try{authenticated=sessionStorage.getItem(AUTH_KEY)==='yes'}catch(e){}
 function setAuthenticated(value){authenticated=value;if(value){current.view='home';current.filter='all';}try{if(value)sessionStorage.setItem(AUTH_KEY,'yes');else sessionStorage.removeItem(AUTH_KEY)}catch(e){};render();if(value){tick();toast('Signed in to Yarrow–Mullein.')} }
 function validateAccess(){const v=$('#accessId').value.replace(/\D/g,'');if(v!==DEMO_ID){$('#loginError').textContent='That Access ID is incorrect. Use the sample ID shown below.';return false;}return true;}
-function loginWithPassword(){if(!validateAccess())return;if($('#loginPassword').value!==DEMO_PASS){$('#loginError').textContent='Incorrect password. Please try again.';$('#loginPassword').value='';return;}$('#loginError').textContent='';$('#loginPassword').value='';setAuthenticated(true);}
+function loginWithPassword(){
+ const error=$('#loginError'),access=$('#accessId'),password=$('#loginPassword');
+ if(!error||!access||!password)return;
+ error.textContent='';
+ if(!validateAccess()){access.focus();return;}
+ if(password.value!==DEMO_PASS){error.textContent='Incorrect password. Enter David123 to use this demonstration.';password.value='';password.focus();return;}
+ password.value='';
+ setAuthenticated(true);
+}
+/* Bind the sign-in form directly at load, rather than relying only on the global
+   document submit listener. Both clicking Sign in and pressing Enter follow
+   the same path. The later delegated handler remains a defensive fallback. */
+(function prepareDesktopSignIn(){
+ const form=document.getElementById('loginForm');
+ if(!form)return;
+ const button=form.querySelector('[type="submit"]');
+ const bootStatus=document.getElementById('loginBootStatus');
+ const submit=event=>{
+   if(event){event.preventDefault();event.stopPropagation();}
+   if(button.disabled)return;
+   button.disabled=true;
+   try{loginWithPassword();}
+   catch(err){
+     console.error('Desktop demonstration sign-in error',err);
+     const error=document.getElementById('loginError');
+     if(error)error.textContent='Sign-in could not finish. Download this HTML file and open it in Chrome or Edge. If it still fails, reload the page.';
+   }finally{button.disabled=false;}
+ };
+ form.addEventListener('submit',submit);
+ // requestSubmit ensures an explicit mouse click works in embedded renderers
+ // that sometimes interfere with native button-to-form submission.
+ button.addEventListener('click',event=>{
+   event.preventDefault();
+   if(form.requestSubmit)form.requestSubmit();else submit(event);
+ });
+ if(bootStatus)bootStatus.hidden=true;
+})();
 
 function store(){try{localStorage.setItem(KEY,JSON.stringify(db))}catch(e){console.warn('Browser storage unavailable',e)}}
 function pushAlert(title,body,{type='update',txId=null,popup=false}={}){
