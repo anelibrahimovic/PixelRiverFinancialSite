@@ -1,21 +1,23 @@
-# Yarrow–Mullein Bank · Mobile prototype
+# Yarrow–Mullein Bank · Interactive mobile prototype
 
-This is a standalone, interactive educational prototype for a non-technical banking customer (David), themed in botanical green, cream, and yarrow gold. The UI includes everyday chequing and savings accounts, validatable send and move flows, pending/completed/failed transaction tracking, status timelines, printable receipts, scheduled weekly/monthly payments, area-specific simulated outages, urgent in-app alerts, printable automatic daily reports, searchable history and FAQs, a rule-based chatbot with optional voice input, CSV export and large text.
+A **responsive mobile banking educational prototype** themed in Yarrow–Mullein’s botanical green, cream and yarrow gold and designed for David, a customer who prefers straightforward controls and proactive transaction communication.
 
-## Launch
+## Run
 
-Open **index.html** on a modern browser through HTTPS/localhost. The loader decompresses the complete standalone HTML application stored in the four bundle text files, without any remote APIs or external dependencies. The original editable source files and standalone HTML are also included in the downloadable project ZIP available from the project author.
+Open `index.html` in a modern browser or host this folder over HTTPS/localhost for PWA offline caching and optional browser notifications. No build step, API keys or external libraries are needed. If merged into a repository with GitHub Pages configured to host its root, the site can be opened at `/yarrow-mullein-mobile/`.
 
-To recover the standalone source directly from this GitHub branch:
-```sh
-cat bundle.0.txt bundle.1.txt bundle.2.txt bundle.3.txt | base64 -d | gzip -d > standalone.html
-```
-Open `standalone.html` in a browser or serve it over HTTPS/localhost. The inline application code and styles in this extracted file are readable and editable.
+## Core interactions
 
-## What is simulated
+- Normal banking dashboard with chequing/savings balances and available funds.
+- Send to a payee or move between simulated accounts, with amount validation, review/confirm, automatic pending settlement, and account balance updates.
+- Searchable Activity screen, Pending/Completed/Failed filters, unique tracking references, seven-step status timeline and print/save-PDF receipts.
+- Recurring weekly/monthly simulated automatic payments (create, pause, resume and remove), processed while the app is open or upon reopening after the due date.
+- Area-specific demonstration outage status, browser-read-aloud updates, failed-payment and outage message centre, alert preferences, optional permission-based browser notifications, plus an explicitly non-functional actual-SMS field.
+- Daily auto-generated printable report, CSV export, searchable FAQ, a local keyword chatbot with optional microphone input, larger-text toggle, offline static caching.
+- Presenter controls to simulate outages/failures, finish payments, trigger an automatic payment or reset data.
 
-**This is not a real banking product.** Payments do not leave this browser; all balances are fictitious. New simulated pending transfers typically settle after ~65 seconds unless presenter-simulated outages interrupt them. An app-open timer / catch-up on reopening handles automatic scheduling and morning report creation. Alerts stay in the demo inbox, with optional browser notifications; no SMS, phone line, real outage feed, external AI, persistent server scheduling or banking integration exists.
+## Important simulation boundaries
 
-Use More → Presenter controls to simulate a service outage, fail the next transfer, settle pending payments, run a recurring payment or reset the data. No real credentials should be entered. Real-bank rollout would require backend payment and authentication integrations, regional incident feeds, an audited ledger, secure scheduling, SMS delivery and security/privacy review.
+This is a local educational simulation, **not a real bank app**. It does not move real money, authenticate users, use a core banking API, fetch live outages, send actual SMS, run scheduled jobs while the app remains closed, or use hosted generative AI. Browser notifications depend on permission and app availability. Do not enter real financial credentials. All state is stored on the current browser using localStorage. Real deployment requires a secure server-side payment API/ledger, authenticated event webhooks, incident feed, scheduled worker, SMS/notification queue and full security and privacy assessment.
 
-The `bundle.*.txt` files are a gzip/base64 transport encoding of the complete client-side standalone HTML; no executable server is needed.
+The ChatGPT deliverable ZIP also contains an **enhanced single-file standalone version** with a richer UI for offline presentations.
