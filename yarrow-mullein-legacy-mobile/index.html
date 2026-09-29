@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#d8ba44">
+  <meta name="description" content="A deliberately dated Yarrow–Mullein Bank mobile banking concept for before-and-after comparison.">
+  <title>YM Bank | Mobile Banking</title>
+  <style>
+    :root{font:14px/1.35 Arial,Helvetica,sans-serif;color:#242b29;background:#dddcd5}
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100dvh}
+    button,input,select,textarea{font:inherit}
+    button{cursor:pointer}
+    button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #356b58;outline-offset:2px}
+    .phone{background:#f3f3ee;width:100%;max-width:420px;min-height:100dvh;margin:auto;border-left:1px solid #b5b5a8;border-right:1px solid #b5b5a8;display:flex;flex-direction:column}
+    .mast{background:linear-gradient(#e7d368,#c9a92b);border-bottom:3px solid #667347;min-height:72px;padding:10px 15px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+    .mark{height:46px;width:46px;border-radius:3px;border:2px solid #64723f;display:flex;align-items:center;justify-content:center;background:#f9e9a3;font-family:Georgia,serif;color:#465d36;font-size:22px;font-weight:900;box-shadow:inset 0 0 0 2px #fff8d4}
+    .brand{display:flex;align-items:center;gap:9px}
+    .bank{color:#354735;font-family:Georgia,serif;font-weight:bold;font-size:17px;line-height:1.04}
+    .bank small{display:block;letter-spacing:1.1px;font:700 9px Arial,sans-serif;color:#48543d;margin-top:4px}
+    .utility{color:#344b3e;border:1px solid #a48a21;background:#f8e9aa;border-radius:2px;padding:6px 9px;font-weight:700;font-size:12px}
+    main{flex:1;padding:13px 12px 32px}
+    h1{font-size:20px;font-weight:bold;line-height:1.15;margin:6px 0 13px;color:#33433b}
+    h2{font-size:14px;margin:0 0 8px;color:#364638}
+    p{margin:9px 0;line-height:1.47}
+    .muted{color:#6b7169;font-size:12px}
+    .kicker{color:#6c6a5f;text-transform:uppercase;font-size:10px;letter-spacing:.8px;margin-bottom:5px}
+    .box{background:#fff;border:1px solid #aaa9a0;margin:12px 0;box-shadow:0 1px 1px #ccccb7}
+    .box-heading{font-size:13px;background:#d4d9c8;border-bottom:1px solid #aeb5a2;padding:9px 11px;text-transform:uppercase;letter-spacing:.25px;font-weight:bold;color:#394735}
+    .box-content{padding:12px}
+    .account{border-bottom:1px solid #c8cec5;padding:13px 11px}
+    .account:last-child{border:0}
+    .acct-name{font-size:13px;font-weight:bold}
+    .acct-id{font-size:11px;color:#656d62;margin-top:3px}
+    .balance{font-size:22px;font-weight:bold;color:#31473b;margin:9px 0 5px}
+    .gray-bar{display:flex;justify-content:space-between;background:#e5e6df;border:1px solid #babfb2;padding:8px 10px;margin-top:12px;font-size:12px;gap:7px}
+    .yellow{background:#d9c151;border:1px solid #a38d2f;border-bottom:2px solid #8e7b2c;border-radius:2px;color:#273928;font-weight:bold;min-height:43px;padding:10px 12px}
+    .yellow:active{background:#c6af41}
+    .secondary{background:#f7f7f3;border:1px solid #a6aca1;border-bottom:2px solid #858e83;border-radius:2px;color:#39503e;font-weight:bold;min-height:42px;padding:10px}
+    .wide{width:100%;margin:6px 0}
+    .links{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:12px 0}
+    .links button{font-size:12px;min-height:62px;text-align:left;padding:9px}
+    .important{background:#faf3ce;border:1px solid #bcb279;padding:10px;font-size:12px;line-height:1.45;margin:14px 0}
+    label{display:block;font-size:12px;font-weight:bold;margin:13px 0 5px;color:#344537}
+    input,select,textarea{display:block;width:100%;padding:10px;min-height:43px;border:1px solid #969e92;border-radius:0;background:white;color:#1f3329;font-size:14px}
+    textarea{min-height:80px;resize:vertical}
+    .subtext{font-size:11px;color:#6d7469;margin-top:4px}
+    .error{font-weight:bold;color:#a02c21;min-height:19px;font-size:12px;line-height:1.3}
+    .success{background:#ecf0df;border:1px solid #768769;color:#273d31;padding:13px;margin:13px 0}
+    .success h2{font-size:16px;margin-bottom:8px}
+    .confirm{margin:10px 0 0;border-top:1px solid #9da98e;padding-top:10px;font-size:12px}
+    .row{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid #d2d4cf;padding:8px 0}
+    .row:last-child{border:0}
+    .row strong{text-align:right}
+    .login-top{padding:20px 11px 11px;text-align:center}
+    .login-crest{font:700 34px Georgia,serif;color:#526044;background:#e3d16c;border:2px solid #6b7b52;width:70px;height:70px;display:flex;align-items:center;justify-content:center;margin:auto auto 11px}
+    .login-legend{color:#53604b;font-size:12px;letter-spacing:1px;font-weight:bold}
+    .login-form{background:#fff;border:1px solid #b3b4a7;margin:4px 0 11px;padding:12px}
+    .login-form h1{margin-top:1px;font-size:19px}
+    .nav{display:grid;grid-template-columns:repeat(3,1fr);border-top:2px solid #748362;background:#d5d9cd;position:sticky;bottom:0;z-index:2}
+    .nav button{border:0;border-right:1px solid #a8b09f;background:#d5d9cd;min-height:59px;font-size:11px;font-weight:bold;color:#42533d}
+    .nav button:last-child{border-right:0}
+    .nav button.current{background:#f3f1df;border-top:4px solid #b89b32;color:#344939;margin-top:-4px}
+    .nav-icon{display:block;font-size:20px;font-weight:normal;margin-bottom:1px}
+    .legal{border-top:1px solid #cacdc2;text-align:center;padding:11px 8px;font-size:10px;color:#73796f;background:#e8e9e1}
+    [hidden]{display:none!important}
+    @media(min-width:740px){body{display:grid;place-items:center;padding:25px;background:#dcded6}.phone{width:385px;min-height:745px;height:min(840px,calc(100dvh - 50px));box-shadow:0 8px 24px #6a756066;border:6px solid #686a65;border-radius:8px;overflow:hidden}.phone main{overflow-y:auto}.nav{position:static}.legal{font-size:10px}}
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+  </style>
+</head>
+<body>
+<div class="phone" id="phone">
+  <header class="mast">
+    <div class="brand"><span class="mark" aria-hidden="true">YM</span><div class="bank">Yarrow–Mullein<small>MOBILE BANKING</small></div></div>
+    <button id="signout" class="utility" type="button" hidden>Log out</button>
+  </header>
+  <main id="content">
+    <section id="login" aria-label="Member login">
+      <div class="login-top"><div class="login-crest" aria-hidden="true">YM</div><div class="login-legend">MEMBER SERVICES</div></div>
+      <div class="login-form">
+        <h1>Sign in</h1>
+        <p class="muted">Please enter your banking credentials.</p>
+        <form id="loginForm" novalidate>
+          <label for="accessId">Access Card Number</label><input id="accessId" name="accessId" value="4532 9087 1140 6621" inputmode="numeric" autocomplete="off" maxlength="19" required>
+          <label for="password">Password</label><input id="password" name="password" type="password" autocomplete="off" required placeholder="Enter password">
+          <p class="error" id="loginError" role="alert" aria-live="polite"></p>
+          <button class="yellow wide" type="submit">Sign in</button>
+        </form>
+        <button class="secondary wide" id="forgot" type="button">Forgot your password?</button>
+      </div>
+      <div class="important">Forgotten your password? Please contact Member Services by telephone. Online password recovery is unavailable.</div>
+      <p class="muted">For this classroom demonstration, use the supplied sample credentials. Never enter real financial information.</p>
+    </section>
+    <div id="app" hidden>
+      <section id="homePage" class="page">
+        <div class="kicker">Account overview</div><h1>Welcome, David</h1>
+        <div class="gray-bar"><span>Your accounts</span><strong>2</strong></div>
+        <div class="box">
+          <div class="box-heading">Accounts</div>
+          <div class="account"><div class="acct-name">Everyday Chequing</div><div class="acct-id">Account ending 0428</div><div class="balance">$8,462.55</div><span class="muted">Available balance</span></div>
+          <div class="account"><div class="acct-name">Growth Savings</div><div class="acct-id">Account ending 6819</div><div class="balance">$21,340.20</div><span class="muted">Available balance</span></div>
+        </div>
+        <div class="box"><div class="box-heading">Member Services</div><div class="box-content"><div class="links"><button class="secondary" data-page="transfers" type="button">Transfer funds &raquo;</button><button class="secondary" data-page="contact" type="button">Contact bank &raquo;</button></div><p class="muted">Please contact Member Services if you require assistance with a transaction.</p></div></div>
+        <div class="important"><strong>Please note:</strong> Balances shown here are sample account figures. Transfers and payment requests are handled manually. Changes may not appear immediately.</div>
+      </section>
+      <section id="transfersPage" class="page" hidden>
+        <div class="kicker">Member services</div><h1>Transfer funds</h1><p class="muted">Complete this form to request a transfer. Requests must be processed manually by the bank.</p>
+        <div id="requestResult" hidden></div>
+        <div class="box"><div class="box-heading">Request form</div><div class="box-content">
+          <form id="transferForm" novalidate>
+            <label for="transferKind">Type of request</label><select id="transferKind" required><option value="internal">Between my accounts</option><option value="external">Send to another person</option></select>
+            <label for="source">From account</label><select id="source" required><option value="chequing">Everyday Chequing (••0428)</option><option value="savings">Growth Savings (••6819)</option></select>
+            <div id="internalFields"><label for="destination">To account</label><select id="destination"><option value="savings">Growth Savings (••6819)</option><option value="chequing">Everyday Chequing (••0428)</option></select></div>
+            <div id="externalFields" hidden><label for="recipient">Recipient name</label><input id="recipient" type="text" maxlength="70" placeholder="Full name"><label for="recipientNumber">Recipient account reference</label><input id="recipientNumber" maxlength="30" placeholder="Recipient reference" autocomplete="off"></div>
+            <label for="amount">Amount (CAD)</label><input type="number" id="amount" min="0.01" step="0.01" inputmode="decimal" placeholder="0.00" required>
+            <label for="memo">Notes (optional)</label><textarea id="memo" maxlength="180" placeholder="Reason for the request"></textarea>
+            <p class="error" id="transferError" role="alert" aria-live="polite"></p>
+            <button class="yellow wide" type="submit">Submit request</button><p class="subtext">Requests are manually reviewed. A submitted request does not mean that funds have been sent.</p>
+          </form>
+        </div></div>
+      </section>
+      <section id="contactPage" class="page" hidden>
+        <div class="kicker">Member services</div><h1>Contact us</h1>
+        <div class="box"><div class="box-heading">Telephone banking</div><div class="box-content"><p>To check whether your transfer has been processed, please call Member Services.</p><div class="gray-bar"><span>Member Services</span><strong>Call your branch</strong></div><p class="muted">For questions about account balances, transfers or payments, speak with an employee during business hours.</p><p>Monday–Friday<br><strong>9:00 AM – 5:00 PM</strong></p><p class="subtext">Illustrative hours for the classroom scenario.</p></div></div>
+        <div class="box"><div class="box-heading">Visit a branch</div><div class="box-content"><p>For complicated payments or account questions, visit your local branch with your identification.</p><button type="button" class="secondary wide" id="branchInfo">Branch information</button></div></div>
+      </section>
+    </div>
+  </main>
+  <nav class="nav" id="bottomNav" aria-label="Primary navigation" hidden>
+    <button type="button" class="current" data-page="home" aria-current="page"><span class="nav-icon">⌂</span>Home</button>
+    <button type="button" data-page="transfers"><span class="nav-icon">⇄</span>Transfers</button>
+    <button type="button" data-page="contact"><span class="nav-icon">☎</span>Contact</button>
+  </nav>
+  <footer class="legal">© Yarrow–Mullein Bank · Legacy mobile interface<br>Educational simulation · No connection to a financial institution</footer>
+</div>
+<script>
+(function(){
+  'use strict';
+  const $=id=>document.getElementById(id);
+  const ACCOUNT='4532908711406621';
+  const PASSWORD='David123';
+  let lastReference=0;
+  const money=n=>new Intl.NumberFormat('en-CA',{style:'currency',currency:'CAD'}).format(n);
+  function showPage(page){
+    for(const p of ['home','transfers','contact']) $(p+'Page').hidden=p!==page;
+    document.querySelectorAll('[data-page]').forEach(b=>{const active=b.dataset.page===page;b.classList.toggle('current',active);if(b.closest('nav')){if(active)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')}});
+    $('content').scrollTop=0;
+  }
+  function session(open){
+    $('login').hidden=open;$('app').hidden=!open;$('bottomNav').hidden=!open;$('signout').hidden=!open;
+    $('loginError').textContent='';
+    if(open){$('password').value='';showPage('home')}else{$('password').value='';$('requestResult').hidden=true;$('transferForm').reset();toggleTransfer();}
+  }
+  $('loginForm').addEventListener('submit',e=>{
+    e.preventDefault();
+    const access=$('accessId').value.replace(/\D/g,'');
+    if(access!==ACCOUNT){$('loginError').textContent='Please check your Access Card Number.';$('accessId').focus();return}
+    if($('password').value!==PASSWORD){$('loginError').textContent='Incorrect password. Please try again.';$('password').value='';$('password').focus();return}
+    session(true);
+  });
+  $('signout').addEventListener('click',()=>session(false));
+  $('forgot').addEventListener('click',()=>{$('loginError').textContent='Please call Member Services for assistance with your password.'});
+  document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>{if(!$('app').hidden)showPage(b.dataset.page)}));
+  function toggleTransfer(){const external=$('transferKind').value==='external';$('externalFields').hidden=!external;$('internalFields').hidden=external;$('transferError').textContent='';}
+  $('transferKind').addEventListener('change',toggleTransfer);
+  $('transferForm').addEventListener('submit',e=>{
+    e.preventDefault();$('transferError').textContent='';
+    const kind=$('transferKind').value,source=$('source').value,destination=$('destination').value,amount=Number($('amount').value),recipient=$('recipient').value.trim();
+    if(kind==='internal'&&source===destination){$('transferError').textContent='Select two different accounts.';return}
+    if(kind==='external'&&recipient.length<2){$('transferError').textContent='Enter the recipient name.';$('recipient').focus();return}
+    if(kind==='external'&&$('recipientNumber').value.trim().length<3){$('transferError').textContent='Enter the recipient account reference.';$('recipientNumber').focus();return}
+    if(!Number.isFinite(amount)||amount<=0||Math.abs(amount-Math.round(amount*100)/100)>1e-8){$('transferError').textContent='Enter a valid amount using no more than two decimal places.';$('amount').focus();return}
+    if(amount>(source==='chequing'?8462.55:21340.20)){$('transferError').textContent='Your request exceeds the sample account balance.';return}
+    lastReference++;
+    const ref='YM-MR-'+String(new Date().getFullYear())+'-'+String(lastReference).padStart(3,'0');
+    const target=kind==='internal'?(destination==='savings'?'Growth Savings':'Everyday Chequing'):recipient;
+    $('requestResult').hidden=false;
+    $('requestResult').innerHTML='<div class="success" role="status"><h2>Request submitted</h2><p>Your request has been sent for <strong>manual review</strong>.</p><div class="confirm"><div class="row"><span>Reference</span><strong>'+ref+'</strong></div><div class="row"><span>Amount</span><strong>'+money(amount)+'</strong></div><div class="row"><span>To</span><strong>'+escapeHTML(target)+'</strong></div></div><p><strong>Important:</strong> Funds have not moved. Please call Member Services to find out whether your request has been processed. Save this reference for your own records.</p></div>';
+    $('transferForm').reset();toggleTransfer();$('content').scrollTop=0;
+  });
+  function escapeHTML(x){return String(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+  $('branchInfo').addEventListener('click',()=>{$('branchInfo').insertAdjacentHTML('afterend','<p class="important">For branch details, please contact Member Services by telephone. Branch lookup is not available in this application.</p>');$('branchInfo').disabled=true});
+  session(false);
+})();
+</script>
+</body>
+</html>
